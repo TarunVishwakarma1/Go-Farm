@@ -40,7 +40,7 @@ func InitDB(filepath string) (*sql.DB, error) {
 }
 
 func GetFarmers(ctx context.Context, db *sql.DB) ([]farm.Farmer, error) {
-	rows, err := db.Query("SELECT id, name FROM farmers")
+	rows, err := db.QueryContext(ctx, "SELECT id, name FROM farmers")
 	if err != nil {
 		return nil, err
 	}
