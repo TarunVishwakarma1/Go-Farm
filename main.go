@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"myfarm/storage"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -62,7 +64,9 @@ func (app *App) getAnimalHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) getFarmerHandler(w http.ResponseWriter, r *http.Request) {
-	farmers, err := storage.GetFarmers(app.DB)
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
+	farmers, err := storage.GetFarmers(ctx, app.DB)
 	if err != nil {
 		http.Error(w, "Failed to fetch farmers", http.StatusInternalServerError)
 		return

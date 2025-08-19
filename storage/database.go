@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"myfarm/farm"
@@ -38,7 +39,7 @@ func InitDB(filepath string) (*sql.DB, error) {
 	return db, nil
 }
 
-func GetFarmers(db *sql.DB) ([]farm.Farmer, error) {
+func GetFarmers(ctx context.Context, db *sql.DB) ([]farm.Farmer, error) {
 	rows, err := db.Query("SELECT id, name FROM farmers")
 	if err != nil {
 		return nil, err
